@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
   res.send('API is ready');
 });
 
-app.get('/api/snippet/:id', async (req, res) => {
+app.get('/api/snippets/:id', async (req, res) => {
   const id = req.params.id;
 
   const snippet = await Snippet.findOne({ _id: id });
@@ -45,7 +45,7 @@ app.get('/api/snippet/:id', async (req, res) => {
   }
 });
 
-app.post('/api/snippet', async (req, res) => {
+app.post('/api/snippets', async (req, res) => {
   let code = req.body.code;
 
   if (!code || !code.trim()) {
