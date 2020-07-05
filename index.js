@@ -2,6 +2,7 @@ import { Snippet } from './db/snippet.js';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+
 const app = express();
 const port = 3030;
 const isProd = process.env.NODE_ENV === 'production';
@@ -13,17 +14,17 @@ if (isProd) {
 }
 app.use('/api', bodyParser.json());
 
-function ok(res, data) {
+function ok(res, payload) {
   res.json({
     ok: true,
-    data,
+    payload,
   });
 }
 
-function fail(res, data) {
+function fail(res, payload = 'internal_error') {
   res.json({
     ok: false,
-    data,
+    payload,
   });
 }
 
@@ -34,7 +35,13 @@ app.get('/', (req, res) => {
 app.get('/api/snippets/:id', async (req, res) => {
   const id = req.params.id;
 
-  const snippet = await Snippet.findOne({ _id: id });
+  let snippet;
+
+  try {
+    snippet = await Snippet.findOne({ _id: id });
+  } catch (e) {
+    return fail(res);
+  }
 
   if (snippet) {
     const { code } = snippet;
