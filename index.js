@@ -64,7 +64,7 @@ app.post('/api/snippets', async (req, res) => {
   const existSnippet = await Snippet.findOne({ code });
 
   if (existSnippet) {
-    return ok(res, { _id: existSnippet._id });
+    return ok(res, { id: existSnippet._id });
   }
 
   const snippet = new Snippet({ code });
